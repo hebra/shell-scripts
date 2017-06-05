@@ -1,0 +1,24 @@
+#! /bin/bash
+
+# (C) 2017 Hendrik Brandt <https://github.com/hebra/>
+# Released under the terms of Apache License 2.0
+
+# This script is for checking the available updates via APT, and if there are any available
+# send a message to a specific MatterMost channel via a webhook.
+# Can be run for example as a daily cron job.
+
+# Adjust these 3 settings to your environment
+WEBHOOK_URL="https://mattermost.example.com/hooks/1234567890abcde"
+MM_CHANNEL="updates"
+MM_USER="robot"
+
+IP4=`ip route get 1 | awk '{print $NF;exit}'`
+UPDATES_COUNT=`apt-get -s dist-upgrade | grep "^Inst" | wc -l`
+SECURITY_COUNT=`apt-get -s dist-upgrade | grep "^Inst" | grep -i security | wc -l`
+
+if [[ $UPDATES_COUNT -gt 0 ]]; then
+
+        curl -i -X POST \
+                -d "payload={\"text\": \":warning: There are **${UPDATES_COUNT} (${SECURITY_COUNT} critical) outstanding** package updates for **${IP4} ($(hostname))**!\", \"username\":\"${MM_USER}\", \"channel\":\"${MM_CHANNEL}\"}" \
+                ${WEBHOOK_URL} >/dev/null 2>&1
+fi
