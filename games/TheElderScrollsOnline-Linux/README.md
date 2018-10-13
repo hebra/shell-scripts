@@ -14,9 +14,9 @@ Everything tested with Ubuntu 18.10 64-Bit and NVidia GTX 1080.
 - enabled Steam Beta access
 - at least one Windows-only game in your library
 
-### 32-bit packages and addtional Wine libraries
+### Vulkan, 32-bit packages and addtional Wine libraries
 - as the ESO launcher itself is 32-bit only right now (not the game itself), we need some libraries in their 32-bit flavour to be installed as well
-	apt install libfreetype6:i386 wine wine64
+	apt install mesa-vulkan-drivers libfreetype6:i386 wine wine64
 
 ### LLVM 7
 As LLVM 7 is not available in the main Ubuntu repositories yet (or a PPA) we need to add an additional repository provided by the LLVM project.

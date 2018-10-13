@@ -1,7 +1,6 @@
 #!/bin/bash
 
 PROTON_NO_ESYNC=1 \
-PROTON_USE_WINED3D11=1 \
 mesa_glthread=true \
 vblank_mode=0 \
 STEAM_COMPAT_DATA_PATH=~/.proton python3 \
