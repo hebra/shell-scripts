@@ -2,9 +2,7 @@
 
 This guide is work in progress.
 
-Everything tested with Ubuntu 18.04 64-Bit and NVidia GTX 1080.
-
-Note: as of writing of this guide (September 2018) both LLVM 7 and Mesa 18.2 are not available as a GA release, therefore pre-releases will be used. This guide will be updated as soon as official GA packages are available.
+Everything tested with Ubuntu 18.10 64-Bit and NVidia GTX 1080.
 
 ## Preconditions
 - make sure your system matches the requirements listed on https://github.com/ValveSoftware/Proton/blob/proton_3.7/PREREQS.md
@@ -15,7 +13,10 @@ Note: as of writing of this guide (September 2018) both LLVM 7 and Mesa 18.2 are
 - an installed Steam for Linux (we need this even if you don't use the Steam version of TESO)
 - enabled Steam Beta access
 - at least one Windows-only game in your library
-- to prevent conflicts with other/older versions of Wine you might want to uninstall PlayOnLinux and Wine prior to proceeding with this guide
+
+### 32-bit packages and addtional Wine libraries
+- as the ESO launcher itself is 32-bit only right now (not the game itself), we need some libraries in their 32-bit flavour to be installed as well
+	apt install libfreetype6:i386 wine wine64
 
 ### LLVM 7
 As LLVM 7 is not available in the main Ubuntu repositories yet (or a PPA) we need to add an additional repository provided by the LLVM project.
@@ -26,10 +27,6 @@ As LLVM 7 is not available in the main Ubuntu repositories yet (or a PPA) we nee
       deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main
 - then run
       sudo apt update && sudo apt install clang-7 lldb-7 lld-7
-
-### Mesa 18.2
-Installing Mesa 18.2 is a little more effort as there are currently no DEB packages available at all.
-
 
 ## Install Steam and enable Beta access
 - download the official Steam DEB package and install it
@@ -51,11 +48,13 @@ Installing Mesa 18.2 is a little more effort as there are currently no DEB packa
       DefaultLimitNOFILE=131072
 - restart the system
 
+### Install a Steam Windows game
+In order for Steam to install Proton you will first need to install a Windows-only game inside Steam. 
+In my case I used The Witcher 3. You need to start the game at least once so Steam will install the matching Proton distribution for your platform.
+
 ## Create separate Proton data folder
 Even though Proton comes as part of Steam the data folder for games doesn't need to be inside Steam.
 It is actually better to keep non-Steam games in a separate folder but still use the Proton binary from Steam.
-
-Note: to force Steam to install Proton you first need to install a non-Linux game inside Steam as well. In my case I used The Witcher 3. You need to start the game at least once to force Steam to install the matching Proton distribution for your platform.
 
 - first create a copy of the Proton data environment in you home folder via
       cp -r ~/.local/share/Steam/SteamApps/common/Proton\ 3.7\ Beta/dist/share/default_pfx ~/.proton
@@ -64,7 +63,7 @@ Note: to force Steam to install Proton you first need to install a non-Linux gam
   - copy an existing TESO installation from Windows (just copy the whole Zenimax Online folder) into
         ~/.proton/pfx/drive_c/
   - or start an installation of TESO from scratch
-      STEAM_COMPAT_DATA_PATH=~/.proton python3 ~/.local/share/Steam/SteamApps/common/Proton\ 3.7\ Beta/proton waitforexitandrun ~/Downloads/Install_ESO.exe
+	PROTON_NO_ESYNC=1 mesa_glthread=true vblank_mode=0 STEAM_COMPAT_DATA_PATH=~/.proton python3 ~/.steam/steam/steamapps/common/Proton\ 3.7\ Beta/proton waitforexitandrun ~/Downloads/Install_ESO.exe
 - Hint: after the initial installation of libraries (e.g. DirectX) the process will fallback to command line - don't panic, after a few seconds the main launcher window should appear
 - start the installation by clicking Install, and go get a coffee or raise some kids - the download will take a few hours (the current Summerset iteration of TESO is rougly 60GB in size to download)
 
@@ -72,4 +71,52 @@ Note: to force Steam to install Proton you first need to install a non-Linux gam
 Whichever way you chose (copy Windows installation or install from scratch), the final step you want to do is starting the actual game.
 For the first test-run open a terminal and start via (again, the folder name and structure might be different on other systems)
 
-    STEAM_COMPAT_DATA_PATH=~/.proton python3 ~/.local/share/Steam/SteamApps/common/Proton\ 3.7\ Beta/proton waitforexitandrun ~/.proton/pfx/drive_c/Program\ Files\ \(x86\)/Zenimax\ Online/The\ Elder\ Scrolls\ Online/game/client/eso64.exe
+```
+PROTON_NO_ESYNC=1 \
+PROTON_USE_WINED3D11=1 \
+mesa_glthread=true \
+vblank_mode=0 \
+STEAM_COMPAT_DATA_PATH=~/.proton python3 \
+        ~/.steam/steam/steamapps/common/Proton\ 3.7\ Beta/proton waitforexitandrun \
+        ~/.proton/pfx/drive_c/Program\ Files\ \(x86\)/Zenimax\ Online/The\ Elder\ Scrolls\ Online/game/client/eso64.exe
+```
+
+## Addons
+Like most players I'd like to have a few improvements in the game like a minimap or a clock. For this, one can use an addon manager like Minion.
+Existing addons from a Windows installations are stored outside of the actual game directory in a separate folder
+
+      C:/Users/NAME/Documents/Elder Scrolls Online/live/AddOns
+
+To make these addons available on the Linux installation, first create a backup of the following folder and then copy the whole AddOns and SavedVariables folders to
+
+      ~/.proton/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/ESO_BUILD_BRANCH
+
+Hint: you probably also want to copy other files and folder over from the Windows folder.
+
+### Set up Minion addon manager
+- install Java JRE and JavaFX
+```
+apt install openjdk-11-jre openjfx
+```
+- download the Java installer from https://minion.mmoui.com/
+- create a new folder ~/.minion
+- move the dpwnloaded zip file to ~/.minion/
+- and unzip the file
+- create the folder for the addons if it doesn't already exist
+``` 
+    mkdir -p ~/.proton/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/ESO_BUILD_BRANCH/AddOns
+```
+- start via
+```
+    java -jar ~/.minion/Minion-jfx.jar
+```
+- reject the offer to update to the latest version (this will crash the Minion)
+- agree to the EULA
+- deselect the games from the list and Continue
+- deselect to scan 
+- open the Settings (top right corner) and set the Game Scan Depth to 20
+- close and restart Minion
+- this time scan for Elder Scrolls Online (and tick Remember my decision)
+- tick the root path and also tick Remember my decision in the next screen
+- scan for games, when offered to select the addon folder for TESO show hidden files (Ctrl+H) and browse to the previously created AddOns folder
+- you now need to restart Minion to actually show the list of AddOns
