@@ -94,11 +94,17 @@ To make these addons available on the Linux installation, first create a backup 
 Hint: you probably also want to copy other files and folder over from the Windows folder.
 
 ### Set up Minion addon manager
-- install Java JRE and JavaFX
+It seems like Minion isn't working with OpenJDK 11 and openJFX, therefore we need to fallback to Oracle's Java 8.
+
+- first add the Webupd8 PPA for Oracle Java
 ```
-apt install openjdk-11-jre openjfx
+sudo add-apt-repository ppa:webupd8team/java
 ```
-- download the Java installer from https://minion.mmoui.com/
+- then install Oracle Java 8
+```
+sudo apt install oracle-java8-installer 
+```
+- next download the Minion Java installer from https://minion.mmoui.com/
 - create a new folder ~/.minion
 - move the dpwnloaded zip file to ~/.minion/
 - and unzip the file
