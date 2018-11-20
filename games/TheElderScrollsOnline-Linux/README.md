@@ -93,6 +93,12 @@ To make these addons available on the Linux installation, first create a backup 
 
 Hint: you probably also want to copy other files and folder over from the Windows folder.
 
+### Additional tweaks
+
+#### Skip intro logos
+
+Edit file `.proton/pfx/drive_c/users/steamuser/My\ Documents/Elder\ Scrolls\ Online/ESO_BUILD_BRANCH/UserSettings.txt` and change `SET SkipPregameVideos` from 0 to 1
+
 ### Set up Minion addon manager
 It seems like Minion isn't working with OpenJDK 11 and openJFX, therefore we need to fallback to Oracle's Java 8.
 
