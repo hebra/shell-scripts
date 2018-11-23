@@ -1,0 +1,20 @@
+[Unit]
+Description=NGinx Prometheus Exporter
+After=nginx.service
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+KillMode=none
+TimeoutStopSec=1min
+
+User=www-data
+Group=www-data
+ExecStart=/usr/local/bin/nginx-prometheus-exporter -nginx.scrape-uri=https://127.0.0.1/nginx_status -nginx.ssl-verify=false
+ExecStop=/bin/kill -HUP $MAINPID
+
+Restart=always
+RestartSec=120
+
+[Install]
+WantedBy=default.target
