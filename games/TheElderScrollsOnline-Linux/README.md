@@ -57,13 +57,13 @@ Even though Proton comes as part of Steam the data folder for games doesn't need
 It is actually better to keep non-Steam games in a separate folder but still use the Proton binary from Steam.
 
 - first create a copy of the Proton data environment in you home folder via
-      cp -r ~/.local/share/Steam/SteamApps/common/Proton\ 3.7\ Beta/dist/share/default_pfx ~/.proton
+      cp -r ~/.local/share/Steam/SteamApps/common/Proton\ 3.16\ Beta/dist/share/default_pfx ~/.proton
 - that data environment is basically just a Wine environment
 - next you have two choices
   - copy an existing TESO installation from Windows (just copy the whole Zenimax Online folder) into
         ~/.proton/pfx/drive_c/
   - or start an installation of TESO from scratch
-	PROTON_NO_ESYNC=1 mesa_glthread=true vblank_mode=0 STEAM_COMPAT_DATA_PATH=~/.proton python3 ~/.steam/steam/steamapps/common/Proton\ 3.7\ Beta/proton waitforexitandrun ~/Downloads/Install_ESO.exe
+	PROTON_NO_ESYNC=1 mesa_glthread=true vblank_mode=0 STEAM_COMPAT_DATA_PATH=~/.proton python3 ~/.steam/steam/steamapps/common/Proton\ 3.16\ Beta/proton waitforexitandrun ~/Downloads/Install_ESO.exe
 - Hint: after the initial installation of libraries (e.g. DirectX) the process will fallback to command line - don't panic, after a few seconds the main launcher window should appear
 - start the installation by clicking Install, and go get a coffee or raise some kids - the download will take a few hours (the current Summerset iteration of TESO is rougly 60GB in size to download)
 
@@ -77,7 +77,7 @@ PROTON_USE_WINED3D11=1 \
 mesa_glthread=true \
 vblank_mode=0 \
 STEAM_COMPAT_DATA_PATH=~/.proton python3 \
-        ~/.steam/steam/steamapps/common/Proton\ 3.7\ Beta/proton waitforexitandrun \
+        ~/.steam/steam/steamapps/common/Proton\ 3.16\ Beta/proton waitforexitandrun \
         ~/.proton/pfx/drive_c/Program\ Files\ \(x86\)/Zenimax\ Online/The\ Elder\ Scrolls\ Online/game/client/eso64.exe
 ```
 
@@ -132,3 +132,9 @@ sudo apt install oracle-java8-installer
 - tick the root path and also tick Remember my decision in the next screen
 - scan for games, when offered to select the addon folder for TESO show hidden files (Ctrl+H) and browse to the previously created AddOns folder
 - you now need to restart Minion to actually show the list of AddOns
+
+### Custom Proton Build
+- in /etc/apt/source.list enable all deb-src (remove the # from the lines)
+- apt update
+- apt-get build-dep wine
+- apt install build-essentials lib32stdc++-8-dev nasm ffmpeg flex bison libfreetype6-dev libavdevice-dev libavformat-dev libswresample-dev libswscale-dev libpostproc-dev libavfilter-dev  libalsaplayer-dev libxcb-shape0-dev libxcb-shm0-dev libxcb-xfixes0-dev libsdl2-dev bzip2 xzip xz-utils gzip libxcb1-dev libvdpau-dev libvkd3d-dev libvkd3d1 libvulkan-dev libcups2-dev  libtiff5-dev  libxml2-dev libxslt1-dev 
