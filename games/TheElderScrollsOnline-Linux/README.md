@@ -83,6 +83,8 @@ It is actually better to keep non-Steam games in a separate folder but still use
 Whichever way you chose (copy Windows installation or install from scratch), the final step you want to do is starting the actual game.
 For the first test-run open a terminal and start via (again, the folder name and structure might be different on other systems)
 
+Hint: after the start the screen will go black and then fallback to the standard GNOME Shell desktop - but don't panick the game has not crashed, just bring it back to foreground via Ctrl+Tab.
+
 ```
 PROTON_NO_ESYNC=1 \
 PROTON_USE_WINED3D11=1 \
