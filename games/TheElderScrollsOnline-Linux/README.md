@@ -1,7 +1,5 @@
 # Setup guide on how to install and run The Elder Scrolls Online on Linux using Steam Proton
 
-This guide is work in progress.
-
 Everything tested with Ubuntu 18.10 64-Bit and NVidia GTX 1080.
 
 ## Preconditions
@@ -12,26 +10,34 @@ Everything tested with Ubuntu 18.10 64-Bit and NVidia GTX 1080.
 - a Steam account
 - an installed Steam for Linux (we need this even if you don't use the Steam version of TESO)
 - enabled Steam Beta access
-- at least one Windows-only game in your library
+- at least one Windows-only game in your Steam library
 
 ### Vulkan, 32-bit packages and addtional Wine libraries
 - as the ESO launcher itself is 32-bit only right now (not the game itself), we need some libraries in their 32-bit flavour to be installed as well
-	apt install mesa-vulkan-drivers libfreetype6:i386 wine wine64
+
+      apt install mesa-vulkan-drivers libfreetype6:i386 wine wine64
 
 ### LLVM 7
 As LLVM 7 is not available in the main Ubuntu repositories yet (or a PPA) we need to add an additional repository provided by the LLVM project.
 - to add the signing key, run the following command as root
+      
       wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|apt-key add -
+
 - create a new file in /etc/apt/source.list.d/ called llvm7.conf and add these two lines
+
       deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main
       deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main
+
 - then run
+
       sudo apt update && sudo apt install clang-7 lldb-7 lld-7
 
 ## Install Steam and enable Beta access
 - download the official Steam DEB package and install it
+
       wget http://repo.steampowered.com/steam/archive/precise/steam_latest.deb
       sudo dpkg -i steam_latest.deb
+
 - start Steam and login
 - go to the menu Steam -> Settings -> Account
 - in the sub-section Beta participation click change and join the beta releases
@@ -44,8 +50,10 @@ As LLVM 7 is not available in the main Ubuntu repositories yet (or a PPA) we nee
 
 ## Prepare the system
 ### Increase maxmimum limit of open files per process
-- edit the file /etc/systemd/system.conf and uncomment the key DefaultLimitNOFILE and set a proper value
+- edit the file `/etc/systemd/system.conf` and uncomment the key `DefaultLimitNOFILE` and set a proper value
+
       DefaultLimitNOFILE=131072
+
 - restart the system
 
 ### Install a Steam Windows game
@@ -57,13 +65,17 @@ Even though Proton comes as part of Steam the data folder for games doesn't need
 It is actually better to keep non-Steam games in a separate folder but still use the Proton binary from Steam.
 
 - first create a copy of the Proton data environment in you home folder via
+
       cp -r ~/.local/share/Steam/SteamApps/common/Proton\ 3.16\ Beta/dist/share/default_pfx ~/.proton
+      
 - that data environment is basically just a Wine environment
 - next you have two choices
   - copy an existing TESO installation from Windows (just copy the whole Zenimax Online folder) into
-        ~/.proton/pfx/drive_c/
+        `~/.proton/pfx/drive_c/`
   - or start an installation of TESO from scratch
-	PROTON_NO_ESYNC=1 mesa_glthread=true vblank_mode=0 STEAM_COMPAT_DATA_PATH=~/.proton python3 ~/.steam/steam/steamapps/common/Proton\ 3.16\ Beta/proton waitforexitandrun ~/Downloads/Install_ESO.exe
+
+        PROTON_NO_ESYNC=1 mesa_glthread=true vblank_mode=0 STEAM_COMPAT_DATA_PATH=~/.proton python3 ~/.steam/steam/steamapps/common/Proton\ 3.16\ Beta/proton waitforexitandrun ~/Downloads/Install_ESO.exe
+
 - Hint: after the initial installation of libraries (e.g. DirectX) the process will fallback to command line - don't panic, after a few seconds the main launcher window should appear
 - start the installation by clicking Install, and go get a coffee or raise some kids - the download will take a few hours (the current Summerset iteration of TESO is rougly 60GB in size to download)
 
@@ -132,9 +144,3 @@ sudo apt install oracle-java8-installer
 - tick the root path and also tick Remember my decision in the next screen
 - scan for games, when offered to select the addon folder for TESO show hidden files (Ctrl+H) and browse to the previously created AddOns folder
 - you now need to restart Minion to actually show the list of AddOns
-
-### Custom Proton Build
-- in /etc/apt/source.list enable all deb-src (remove the # from the lines)
-- apt update
-- apt-get build-dep wine
-- apt install build-essentials lib32stdc++-8-dev nasm ffmpeg flex bison libfreetype6-dev libavdevice-dev libavformat-dev libswresample-dev libswscale-dev libpostproc-dev libavfilter-dev  libalsaplayer-dev libxcb-shape0-dev libxcb-shm0-dev libxcb-xfixes0-dev libsdl2-dev bzip2 xzip xz-utils gzip libxcb1-dev libvdpau-dev libvkd3d-dev libvkd3d1 libvulkan-dev libcups2-dev  libtiff5-dev  libxml2-dev libxslt1-dev 
