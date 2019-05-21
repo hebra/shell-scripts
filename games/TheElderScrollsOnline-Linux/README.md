@@ -56,6 +56,12 @@ As LLVM 7 is not available in the main Ubuntu repositories yet (or a PPA) we nee
 
 - restart the system
 
+### Download latest Proton
+Steam will not start downloading Proton on its own if it is not required by any installed Steam game. 
+To trigger a download open Steam and select Library -> Tools. 
+Search for Proton and double-click to start installation.
+
+
 ### Install a Steam Windows game
 In order for Steam to install Proton you will first need to install a Windows-only game inside Steam. 
 In my case I used The Witcher 3. You need to start the game at least once so Steam will install the matching Proton distribution for your platform.
