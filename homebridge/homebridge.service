@@ -1,0 +1,18 @@
+# A SystemD service configuration for Homebridge.io Apple HomeKit wrapper service
+
+[Unit]
+Description=Homebridge Apple HomeKit wrapper service
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+User=homebridge
+ExecStart=/opt/homebridge/.npm-global/bin/homebridge --no-qrcode --remove-orphans
+Restart=on-failure
+RestartSec=10
+KillMode=process
+StandardOutput=file:/var/log/homebridge.log
+StandardError=file:/var/log/homebridge.error.log
+
+[Install]
+WantedBy=multi-user.target
