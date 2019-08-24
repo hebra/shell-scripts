@@ -1,0 +1,25 @@
+#
+# Sample Nginx vhost config with well-known HTTP exception when HTTPS is enforced
+#
+
+server {
+        listen 80;
+        listen [::]:80;
+        server_name my.domain.tld;
+
+        location /.well-known/ {
+                root /var/www/html;
+        }
+
+        location / {
+                return 301 https://$host$request_uri;
+        }
+}
+
+
+
+#
+# CLI script to optain a LetsEncrypt certificate
+#
+
+certonly --webroot --webroot-path /var/www/html --agree-tos -m account@20khz.de -d my.domain.tld

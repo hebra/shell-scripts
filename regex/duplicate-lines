@@ -1,0 +1,1 @@
+perl -pe 's/<image-ref image-view="(.*)" image-type="L" image-base-name="(.*)" \/>/<image-ref image-view="$1" image-type="L" image-base-name="$2" \/>\n<image-ref image-view="$1" image-type="M" image-base-name="$2" \/>/' sample.xml
