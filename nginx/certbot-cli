@@ -22,4 +22,4 @@ server {
 # CLI script to optain a LetsEncrypt certificate
 #
 
-certonly --webroot --webroot-path /var/www/html --agree-tos -m admin@my.domain.tld -d my.domain.tld
+certbot certonly --webroot --webroot-path /var/www/html --agree-tos -m admin@my.domain.tld -d my.domain.tld
