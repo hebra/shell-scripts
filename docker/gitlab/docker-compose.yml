@@ -31,7 +31,6 @@ services:
         gitlab_rails['gitlab_email_reply_to'] = '${GITLAB_EMAIL_REPLY}'
         gitlab_rails['gitlab_shell_ssh_port'] = 30022
     ports:
-      - "30080:80"
       - "30022:22"
     networks:
       - stack-net
