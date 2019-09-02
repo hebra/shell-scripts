@@ -16,8 +16,8 @@ services:
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         external_url '${GITLAB_EXTERNAL_URL}'
-        letsencrypt['enabled'] = false
-        nginx['enabled'] = false
+        letsencrypt['enable'] = false
+        nginx['enable'] = false
         gitlab_rails['smtp_enable'] = true
         gitlab_rails['smtp_address'] = "${GITLAB_SMTP_SERVER}"
         gitlab_rails['smtp_port'] = ${GITLAB_SMTP_PORT}
