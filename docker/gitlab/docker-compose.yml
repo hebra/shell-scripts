@@ -17,7 +17,9 @@ services:
       GITLAB_OMNIBUS_CONFIG: |
         external_url '${GITLAB_EXTERNAL_URL}'
         letsencrypt['enable'] = false
-        nginx['enable'] = false
+        nginx['enable'] = true
+        nginx['listen_port'] = 80
+        nginx['listen_https'] = false
         gitlab_rails['smtp_enable'] = true
         gitlab_rails['smtp_address'] = "${GITLAB_SMTP_SERVER}"
         gitlab_rails['smtp_port'] = ${GITLAB_SMTP_PORT}
@@ -31,6 +33,7 @@ services:
         gitlab_rails['gitlab_email_reply_to'] = '${GITLAB_EMAIL_REPLY}'
         gitlab_rails['gitlab_shell_ssh_port'] = 30022
     ports:
+      - "30080:80"
       - "30022:22"
     networks:
       - stack-net
