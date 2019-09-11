@@ -52,3 +52,42 @@ As the Gitlab Docker container is often not the only webservice running on the h
 We can however use Linux sockets to still forward external request to the Docker Gitlab instance using an NGinx virtual host and proxy configruation, see the file `nginx-vhost.conf.sample` for an example configuration.
 
 For this to work we need to add the NGinx user (usually called `nginx` or `www-data`) to the group `docker`.
+
+## SSH Forwarding
+
+Usually the SSH port is already occupied on the host machine for, well, SSH. But it is inconvenient and often not possible for user to use a non-standard port for pushing to Gitlab.
+A user could access GIT via HTTPS but this has the disadvantage that 2-factor authentication will not work.
+
+The solution is to create a user `git` on the host with the same home-folder and user ID as the Gitlab user inside the container.
+
+- in this example we assume the home folder will be `/var/data/docker/gitlab/data/` and the user ID is 998
+
+```
+sudo useradd -M -d /var/data/docker/gitlab/data/ -u 998 -G docker -s /bin/sh git
+```
+
+With this done any Gitlab user with uploaded SSH keys can now login to the host.
+
+If you have a look into the file `/var/data/docker/gitlab/data/.ssh/authorized_keys` you will see that Gitlab will add the gitlab-shell command as the default to run when a user logs in via SSH.
+However, this binary is only available inside the docker container, not on the host - so any SSH login will fail with an error message right now.
+
+Therefore we need to create a proxy script `gitlab-shell` on the host in exactly the location of gitlab-shell in the container and make it executable.
+
+```
+sudo mkdir -p /opt/gitlab/embedded/service/gitlab-shell/bin/
+```
+
+Create a new proxy file
+```
+sudo nanoe /opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-shell
+```
+with the following contant, replace the <CONTAINER_NAME> with the name of the Gitlab container, e.g. gitlab_gitlab_1
+
+```
+#!/bin/bash
+docker exec -i -u git <CONTAINER_NAME> sh -c "SSH_CONNECTION='$SSH_CONNECTION' SSH_ORIGINAL_COMMAND='$SSH_ORIGINAL_COMMAND' $0 $1"
+```
+Make the file executable
+```
+sudo chmod a+x /opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-shell
+```

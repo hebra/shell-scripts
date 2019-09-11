@@ -31,7 +31,7 @@ services:
         gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
         gitlab_rails['gitlab_email_from'] = '${GITLAB_EMAIL_FROM}'
         gitlab_rails['gitlab_email_reply_to'] = '${GITLAB_EMAIL_REPLY}'
-        gitlab_rails['gitlab_shell_ssh_port'] = 30022
+        gitlab_rails['gitlab_shell_ssh_port'] = 22
     ports:
       - "30080:80"
       - "30022:22"
