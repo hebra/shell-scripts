@@ -1,0 +1,40 @@
+version: "3"
+
+networks:
+  freshrss-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.22.0.0/24
+
+
+services:
+  freshrss_postgresql:
+    image: postgres:12
+    restart: unless-stopped
+    container_name: freshrss-db
+    volumes:
+      - ${FRESHRSS_PSQL_DATA}:/var/lib/postgresql/data
+    networks:
+      - freshrss-net
+    environment:
+      - POSTGRES_USER=freshrss
+      - POSTGRES_PASSWORD=freshrss
+      - POSTGRES_DB=freshrss
+
+  freshrss:
+    image: freshrss/freshrss:latest
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT}:80"
+    depends_on:
+      - freshrss_postgresql
+    networks:
+      - freshrss-net
+    volumes:
+      - ${FRESHRSS_DATA}:/var/www/FreshRSS/data
+      - ${FRESHRSS_EXTENSIONS}:/var/www/FreshRSS/extensions
+    environment:
+      - CRON_MIN=${FRESHRSS_CRON}
+      - TZ=${FRESHRSS_TIMEZONE}

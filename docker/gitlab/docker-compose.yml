@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 networks:
   stack-net:
@@ -6,13 +6,13 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.20.0.0/24
+      - subnet: 172.20.0.0/24
 
 services:
   gitlab:
     image: ${GITLAB_IMAGE}
     restart: always
-    hostname: "${GITLAB_HOSTNAME}"
+    hostname: '${GITLAB_HOSTNAME}'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         external_url '${GITLAB_EXTERNAL_URL}'

@@ -1,0 +1,14 @@
+ octofarm-monolithic:
+    container_name: octofarm-monolithic
+    image: octofarm/octofarm:monolithic-latest
+    restart: unless-stopped
+    volumes:
+    - ${OCTOFARM_LOGS}:/app/logs
+    - ${OCTOFARM_SCRIPTS}:/app/scripts
+    - ${OCTOFARM_IMAGES}:/app/images
+    ports:
+    # SYSTEM:CONTAINER
+      - ${HOST_PORT}:${OCTOFARM_PORT}
+    environment:
+    - OCTOFARM_PORT=${OCTOFARM_PORT}
+    - SUPER_SECRET_KEY=${SUPER_SECRET_KEY}
