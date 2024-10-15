@@ -1,0 +1,52 @@
+[user]
+        # Replace thie with your name and Intershop email address
+	name = First Last
+	email = email@example.com
+[push]
+        # automatically find matching local and remote branches on push
+        default = simple
+[fetch]
+        # Automatically remove locally tracked, but remotely deleted branches
+        prune = true
+[pull]
+        # Automatically remove locally tracked, but remotely deleted branches
+        prune = true
+[merge]
+        # use the remote branch (upstream) as default merge base, by this GIT behaves more like SVN on merging
+        defaultToUpstream = true
+[rebase]
+        # reorder depending commits prior merge to make merge less error-prone
+        autosquash = true
+[branch]
+        # auto setup the original remote branch as target for a local merge
+        autosetupmerge = always
+        # rebase instead of merging to avoid "merged branch" commits
+        autosetuprebase = always
+[rerere]
+        # enables "reuse recorded resolution" - reuse the order of a test-merge in case of a following real merge
+        enabled = true
+[color]
+        # add some colours to the terminal output
+        ui = true
+[core]
+        # optional: uncomment this to your favorite editor, e.g. for git commit messages
+        ## editor = nano
+        # increae compression level on any remote action to speed up network transfers
+        compression = 9
+        # use this on OSX/Linux
+        autocrlf = input
+[alias]
+        accept-ours = "!f() { [ -z \"$@\" ] && set - '.'; git checkout --ours -- \"$@\"; git add -u -- \"$@\"; }; f"
+        accept-theirs = "!f() { [ -z \"$@\" ] && set - '.'; git checkout --theirs -- \"$@\"; git add -u -- \"$@\"; }; f"
+        st = status
+        co = checkout
+        br = branch
+        up = rebase
+        ci = commit
+	sm = submodule
+
+[submodule]
+	recurse = true
+
+[init]
+	defaultBranch = master
