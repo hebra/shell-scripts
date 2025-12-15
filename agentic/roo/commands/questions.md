@@ -1,0 +1,1 @@
+Do you have any more questions regarding the task, or are you ready to start with the implementation. What is your overall confidence level?
